@@ -1,3 +1,4 @@
+from PySide6.QtCore import QTimer
 from PySide6.QtGui import QAction
 from PySide6.QtWidgets import QApplication, QHBoxLayout, QVBoxLayout, QLabel, QMainWindow, QGridLayout, QFrame, QMenu
 
@@ -32,18 +33,48 @@ class HorlogeExamen(QMainWindow):
 
         self.__configuration_examen = ConfigurationExamen()
 
+        self.__libelle_heure_actuelle_valeur = QLabel(datetime.now().strftime())
+        self.__libelle_heure_debut = QLabel("Heure de début:")
+        self.__libelle_heure_fin = QLabel("Heure de fin:")
+        self.__libelle_heure_fin_saide = QLabel("Heure de fin SAIDE:")
+        self.__libelle_heure_debut_valeur = QLabel(self.__configuration_examen.heure_debut.strftime("%H:%M:%S"))
+
+        # QTimer pour rafraichir le temps (1 seconde par défaut)
+        self.__qtimer = QTimer(interval=1000)
+        # La méthode qui sera appelée à chaque interval
+        self.__qtimer.timeout.connect(self.__mise_a_jour_temps)
+        self.__qtimer.start()
+
+    def __mise_a_jour_temps(self):
+        config = self.__configuration_examen
+
+
     def __action_configuration_triggered(self):
         pass
 
 
 class ConfigurationExamen:
 
-    def __init__(self):
+    def __init__(self, heure_debut: datetime= datetime.now(),
+                 duree_examen: datetime= datetime.now().replace(hour=3, minute=0, second=0, microsecond=0),
+                 duree_examen_saide: datetime= datetime.now().replace(hour=4, minute=0, second=0, microsecond=0),
+                 duree_examen_saide_override: datetime= datetime.now(),
+                 afficher_heure_debut: bool= False, afficher_heure_fin: bool= False,
+                 afficher_temps_restant: bool = True, afficher_temps_restant_saide: bool = True,
+                 afficher_horloge: bool = True, afficher_graphique: bool = True):
         # On utilise des objets datetime car timedelta ne fonctionne pas avec seulement time
-        self.__heure_debut: datetime = datetime.now()
-        self.__duree_examen: datetime = datetime.now().replace(hour=3, minute=0, second=0, microsecond=0)
-        self.__duree_examen_saide: datetime = self.__duree_examen.replace(hour=4)
+        self.__heure_debut: datetime = heure_debut
+        self.__duree_examen: datetime = duree_examen
+        self.__duree_examen_saide: duree_examen_saide
         self.__duree_examen_saide_override: bool = False
+
+        self.__afficher_heure_debut = False
+        self.__afficher_heure_fin = False
+        self.__afficher_temps_restant = True
+        self.__afficher_temps_restant_saide = True
+        self.__afficher_horloge = True
+        self.__afficher_graphique = True
+
 
     @property
     def heure_debut(self) -> datetime:

@@ -1,0 +1,19 @@
+/*
+ * app - Qt Style Sheet
+ * Created: 2026-10-29
+ *
+ * QSS Toolkit Quick Tips:
+ * - Press Ctrl+Space (Cmd+Space) for intelligent auto-completion
+ * - Use Ctrl+/ (Cmd+/) to comment/uncomment code blocks
+ * - Use the QSS Colors panel and editor context menu to save or insert colors
+ */
+
+/* Add your QSS styles here */
+
+QLabel#heure_actuelle {
+    background-color: #000000;
+    color: #FFFFFF;
+    font-size: 32px;
+    qproperty-alignment: AlignCenter;
+}
+
